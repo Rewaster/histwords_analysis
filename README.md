@@ -14,7 +14,7 @@ If you choose to use already aligned embeddings for English - German and English
 2. Run the script
 3. The data will be available in .csv and .xslx formats
 
-Note: if you would like to adjust the sensitivity of word pair selection, you can also change *similarity_marker* and *threshhold_change* variables. Both decade embeddings and this script were provided by https://github.com/Kathrin227 and slightly modified by me. It also uses HistWords **embedding** and **sequentialembedding** modules, which are already included here in the **representations** folder.
+Note: if you would like to adjust the sensitivity of word pair selection, you can also change *similarity_marker* and *threshhold_change* variables. Both decade embeddings and this script were provided by https://github.com/Kathrin227 and slightly modified by me. It also uses HistWords **embedding** and **sequentialembedding** modules, which are already included here.
 ## Century embeddings
 ### Preparation
 The alignment process is very similar to decade, but requires more work beforehand. First, the appropriate embeddings must be converted into .txt files and combined with averaged vectors. This is achieved using *data_formatting.py* script, just give it the paths to all the HistWords sgns and it will produce results with an appropriate folder structure which is then used by other scripts.
