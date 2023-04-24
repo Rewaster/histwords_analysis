@@ -1,4 +1,4 @@
-from representations.sequentialembedding import SequentialEmbedding
+from sequentialembedding import SequentialEmbedding
 import pandas as pd
 import numpy as np
 import os
