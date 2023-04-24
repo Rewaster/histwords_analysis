@@ -148,11 +148,6 @@ else:
         newL1_embedding = ans.load_pickle(pickle_dir + 'new' + lang_list[0].upper() + '.pkl')
         oldL2_embedding = ans.load_pickle(pickle_dir + 'old' + lang_list[0].upper() + '.pkl')
         newL2_embedding = ans.load_pickle(pickle_dir + 'new' + lang_list[0].upper() + '.pkl')
-        '''
-        Навести порядок в селф-клс-ничего:селф когда ток в классе,
-        клс чтобы вызывать из класса но он имеет доступ к другим вещам в классе, а они к нему,
-        а ничего когда сам по себе 
-        '''
     check_dir(plot_dir)
     orig_files = [oldL1_path, newL1_path, oldL2_path, newL2_path]
     for i in os.listdir(split_dir):
