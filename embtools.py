@@ -398,7 +398,7 @@ class refine:
                             aligned_emb_2 = self.load_txt(aligned_emb_2_path)
                     self.combine_txt(aligned_emb_1, aligned_emb_2, out_path)
         else:
-            year = emb_1_path[emb_1_path.rfind('\\')+1:-4]
+            year = emb_1_path[emb_1_path.rfind('\\')+1:-5]
             dir_path = out_path[:out_path.rfind('\\')+1]
             npy_path = dir_path + year + '-w.npy'
             pkl_path = dir_path + year + '-vocab.pkl'
