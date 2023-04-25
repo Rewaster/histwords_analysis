@@ -17,7 +17,7 @@ plot_dir = 'D:\\DL4NLP\\full_cycle_test\\plots\\'
 hrd_dir = 'D:\\DL4NLP\\all_dicts\\'
 
 
-lang_list = ['eng','fre'] #two languages of interest in the analysis - currently out of 'eng','ger','fre','cmn' ('cmn' will not work with centuries)
+lang_list = ['eng','ger'] #two languages of interest in the analysis - currently out of 'eng','ger','fre','cmn' ('cmn' will not work with centuries)
 l1_files = []
 l2_files = []
 word_1 = 'bourgeoisie'
@@ -26,11 +26,11 @@ word_2 = 'bourgeoisie'
 WORDS = [word_1, word_2] #can string together more words for decade plotting, century plotting can only show two at the same time
 year_1 = 1800
 year_2 = 2000
-split = 40
+split = 10
 dia = range(year_1, year_2, split)
-dec_analysis = False
+dec_analysis = True
 
-comb_dict = hrd_dir + 'seed_dict_' + lang_list[1] + '_' + lang_list[0] + '.txt'
+comb_dict = hrd_dir + 'seed_dict_' + lang_list[1] + '_' + lang_list[0] + '-filtered.txt'
 
 def check_dir(directory):
     if not os.path.exists(directory):
@@ -86,13 +86,25 @@ if dec_analysis:
         aligned_dir_l1 = aligned_dir + i[0][:-4] + '-' + lang_list[0] + '.txt'
         aligned_dir_l2 = aligned_dir + i[1][:-4] + '-' + lang_list[1] + '.txt'
         if not os.path.isfile(dict_path):
-            rf.decade_dicts(full_path_l1 + i[0], full_path_l2 + i[1], dicts_dir, lang_list, current_year, hrd_path = comb_dict, words = True, common_numbers = False)
+            rf.decade_dicts(full_path_l1 + i[0], full_path_l2 + i[1], dicts_dir, lang_list, current_year, hrd_path = comb_dict, words = True, common_numbers = True)
         if not os.path.isfile(aligned_dir_l1) or not os.path.isfile(aligned_dir_l2):
             if not os.path.isfile(aligned_dir + current_year + '-w.npy') or not os.path.isfile(aligned_dir + current_year + '-vocab.pkl'):
                 rf.full_prep(temp_dir, dict_path, full_path_l1 + i[0], full_path_l2 + i[1], 
                              temp_path_l1 + i[0], temp_path_l2 + i[1], vecmap_dir,
-                             aligned_dir,  '',
+                             aligned_dir,  lang_list,
                              decades = dec_analysis, tagging = False)
+    #cleanup
+    l1_temp_files = os.listdir(temp_path_l1)
+    l2_temp_files = os.listdir(temp_path_l2)
+    aligned_temp_files = os.listdir(aligned_dir + 'temp\\')
+    #dict_files = os.listdir(dicts_dir)
+    if l1_temp_files or l2_temp_files or aligned_temp_files:
+        for f in l1_temp_files:
+            os.remove(temp_path_l1 + f)
+        for f in l2_temp_files:
+            os.remove(temp_path_l2 + f)
+        for f in aligned_temp_files:
+            os.remove(aligned_dir + 'temp\\' + f)
     check_dir(plot_dir)
     grph.decade_plotting(WORDS, aligned_dir, plot_dir, year_1, year_2, split)
 else:
@@ -148,6 +160,11 @@ else:
         newL1_embedding = ans.load_pickle(pickle_dir + 'new' + lang_list[0].upper() + '.pkl')
         oldL2_embedding = ans.load_pickle(pickle_dir + 'old' + lang_list[0].upper() + '.pkl')
         newL2_embedding = ans.load_pickle(pickle_dir + 'new' + lang_list[0].upper() + '.pkl')
+        '''
+        Навести порядок в селф-клс-ничего:селф когда ток в классе,
+        клс чтобы вызывать из класса но он имеет доступ к другим вещам в классе, а они к нему,
+        а ничего когда сам по себе 
+        '''
     check_dir(plot_dir)
     orig_files = [oldL1_path, newL1_path, oldL2_path, newL2_path]
     for i in os.listdir(split_dir):

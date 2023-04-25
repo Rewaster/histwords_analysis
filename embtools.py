@@ -66,11 +66,11 @@ class refine:
             df = pd.read_csv(hrd_path)
             hrd_l1 = df[langs[0]].values.tolist()
             hrd_l2 = df[langs[1]].values.tolist()
-        
-        emb1_lines, emb1_words = self.common_filter(emb1_path)
-        emb2_lines, emb2_words = self.common_filter(emb2_path)
-        
-        common_numbers = self.intersect_check(emb1_words, emb2_words)
+        if common_numbers:
+            emb1_lines, emb1_words = self.common_filter(emb1_path)
+            emb2_lines, emb2_words = self.common_filter(emb2_path)
+            
+            common_numbers = self.intersect_check(emb1_words, emb2_words)
         
         with open(dict_path, "w", encoding="utf-8") as file:
             if common_numbers:
@@ -252,7 +252,7 @@ class refine:
         if emb1_shape == emb2_shape:
             emb_shape = emb1_shape
         else:
-            raise ValueError('Embedding dimensions do not match, please check the files')
+            raise ValueError('Embedding dimensions do not match or dimensions are not present in the file, please check the files')
             
         len_total = len(emb_total)
         print('New length of a combined embedding:', len_total)
@@ -351,6 +351,9 @@ class refine:
         if zero_clean:
             final_l1 = self.zero_clean(one_space_l1)
             final_l2 = self.zero_clean(one_space_l2)
+        else:
+            final_l1 = one_space_l1
+            final_l2 = one_space_l2
         return final_l1, final_l2            
     
     def full_prep(self, temp_path, dict_path, emb_1_path, emb_2_path, aligned_emb_1_path, aligned_emb_2_path, vecmap_dir, out_path, lang, decades = True, tagging = True):
@@ -375,32 +378,38 @@ class refine:
         """
         
         os.chdir(vecmap_dir)
-        temp_1 = temp_path + emb_1_path[emb_1_path.rfind('\\')+1:-4] + '-prepped.txt'
-        temp_2 = temp_path + emb_2_path[emb_2_path.rfind('\\')+1:-4] + '-prepped.txt'
-        if not os.path.isfile(aligned_emb_1_path) or not os.path.isfile(aligned_emb_2_path):
-            final_l1, final_l2 = self.two_step(emb_1_path, emb_2_path, zero_clean = True)
-            self.save_txt(final_l1, temp_1)
-            self.save_txt(final_l2, temp_2)
-            train_command = "python map_embeddings.py --semi_supervised " + dict_path + " " + temp_1 + " " + temp_2 + " " + aligned_emb_1_path + " " + aligned_emb_2_path + " --cuda"
-            os.system(train_command) 
-        if not decades and not os.path.isfile(out_path):        
-                if tagging:
-                        aligned_emb_1 = self.tag_word2vec_file(aligned_emb_1_path, '_old'+lang.upper(), as_txt = True) 
-                        aligned_emb_2 = self.tag_word2vec_file(aligned_emb_2_path, '_new'+lang.upper(), as_txt = True)
-                else:
-                        aligned_emb_1 = self.load_txt(aligned_emb_1_path)
-                        aligned_emb_2 = self.load_txt(aligned_emb_2_path)
-                self.combine_txt(aligned_emb_1, aligned_emb_2, out_path)
+        temp_1 = temp_path + emb_1_path[emb_1_path.rfind('\\')+1:-4] 
+        temp_2 = temp_path + emb_2_path[emb_2_path.rfind('\\')+1:-4]
+        if not decades:
+            if not os.path.isfile(aligned_emb_1_path) or not os.path.isfile(aligned_emb_2_path):
+                final_l1, final_l2 = self.two_step(emb_1_path, emb_2_path, zero_clean = True)
+                temp_1 = temp_1 + '-prepped.txt'
+                temp_2 = temp_2 + '-prepped.txt'
+                self.save_txt(final_l1, temp_1)
+                self.save_txt(final_l2, temp_2)
+                train_command = "python map_embeddings.py --semi_supervised " + dict_path + " " + temp_1 + " " + temp_2 + " " + aligned_emb_1_path + " " + aligned_emb_2_path + " --cuda"
+                os.system(train_command) 
+            if not os.path.isfile(out_path):        
+                    if tagging:
+                            aligned_emb_1 = self.tag_word2vec_file(aligned_emb_1_path, '_old'+lang.upper(), as_txt = True) 
+                            aligned_emb_2 = self.tag_word2vec_file(aligned_emb_2_path, '_new'+lang.upper(), as_txt = True)
+                    else:
+                            aligned_emb_1 = self.load_txt(aligned_emb_1_path)
+                            aligned_emb_2 = self.load_txt(aligned_emb_2_path)
+                    self.combine_txt(aligned_emb_1, aligned_emb_2, out_path)
         else:
-            year = emb_1_path[emb_1_path.rfind('\\')+1:-9]
+            year = emb_1_path[emb_1_path.rfind('\\')+1:-4]
             dir_path = out_path[:out_path.rfind('\\')+1]
             npy_path = dir_path + year + '-w.npy'
             pkl_path = dir_path + year + '-vocab.pkl'
             if not os.path.isfile(npy_path) or not os.path.isfile(pkl_path):
                 final_l1, final_l2 = self.two_step(emb_1_path, emb_2_path, zero_clean = False)
+                temp_1 = temp_1 + '-' + lang[0] + '-prepped.txt'
+                temp_2 = temp_2 + '-' + lang[1] + '-prepped.txt'
                 self.save_txt(final_l1, temp_1)
                 self.save_txt(final_l2, temp_2)
                 train_command = "python map_embeddings.py --semi_supervised " + dict_path + " " + temp_1 + " " + temp_2 + " " + aligned_emb_1_path + " " + aligned_emb_2_path + " --cuda"
-                os.system(train_command) 
-                self.combine(aligned_emb_1_path, aligned_emb_2_path, npy_path, pkl_path)
-                
+                #os.system(train_command)
+                aligned_emb_1 = self.load_txt(aligned_emb_1_path)
+                aligned_emb_2 = self.load_txt(aligned_emb_2_path)
+                self.combine(aligned_emb_1, aligned_emb_2, npy_path, pkl_path)
