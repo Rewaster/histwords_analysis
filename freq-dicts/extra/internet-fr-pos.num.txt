@@ -1,0 +1,49 @@
+The frequency distribution for attribute 'pos' in corpus 'internet-fr'
+For more information visit http://corpus.leeds.ac.uk/list.html
+ - corpus size: 185102375 tokens
+ - lexicon size: 45 types
+1 206780.17 NOM
+2 113690.42 PRP
+3 89812.21 DET:ART
+4 80625.49 PUN
+5 66061.88 ADJ
+6 52623.85 ADV
+7 51043.71 PRO:PER
+8 42600.59 KON
+9 40577.95 VER:pres
+10 39873.22 SENT
+11 28051.54 PRP:det
+12 26539.44 VER:infi
+13 25955.77 VER:pper
+14 17432.30 NUM
+15 14991.56 PRO:DEM
+16 14166.37 PRO:REL
+17 13703.65 DET:POS
+18 10343.88 NAM
+19 9373.83 ABR
+20 8546.97 VER:aux:pres
+21 7959.80 PUN:cit
+22 7243.76 VER:impf
+23 6461.30 PRO:IND
+24 5054.01 VER:subp
+25 4682.86 VER:simp
+26 3813.30 VER:ppre
+27 3227.90 VER:futu
+28 2031.49 VER:cond
+29 1685.25 VER:aux:impf
+30 1117.44 VER:aux:infi
+31 863.00 VER:subi
+32 743.11 INT
+33 398.67 VER:aux:cond
+34 367.62 VER:aux:futu
+35 318.61 VER:aux:subp
+36 286.00 SYM
+37 262.81 VER:aux:simp
+38 192.73 VER:aux:ppre
+39 139.51 PRO
+40 125.81 PRO:POS
+41 102.92 PRE:1st
+42 81.80 VER:aux:subi
+43 33.24 VER:aux:pper
+44 12.26 VER:impe
+45 0.04 VER:aux:impe
