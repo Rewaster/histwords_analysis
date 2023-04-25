@@ -91,7 +91,7 @@ if dec_analysis:
             if not os.path.isfile(aligned_dir + current_year + '-w.npy') or not os.path.isfile(aligned_dir + current_year + '-vocab.pkl'):
                 rf.full_prep(temp_dir, dict_path, full_path_l1 + i[0], full_path_l2 + i[1], 
                              temp_path_l1 + i[0], temp_path_l2 + i[1], vecmap_dir,
-                             aligned_dir,  lang_list,
+                             aligned_dir[:-1],  lang_list,
                              decades = dec_analysis, tagging = False)
     #cleanup
     l1_temp_files = os.listdir(temp_path_l1)
