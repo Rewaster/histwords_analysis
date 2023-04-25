@@ -409,7 +409,7 @@ class refine:
                 self.save_txt(final_l1, temp_1)
                 self.save_txt(final_l2, temp_2)
                 train_command = "python map_embeddings.py --semi_supervised " + dict_path + " " + temp_1 + " " + temp_2 + " " + aligned_emb_1_path + " " + aligned_emb_2_path + " --cuda"
-                #os.system(train_command)
+                os.system(train_command)
                 aligned_emb_1 = self.load_txt(aligned_emb_1_path)
                 aligned_emb_2 = self.load_txt(aligned_emb_2_path)
                 self.combine(aligned_emb_1, aligned_emb_2, npy_path, pkl_path)
