@@ -412,4 +412,4 @@ class refine:
                 os.system(train_command)
                 aligned_emb_1 = self.load_txt(aligned_emb_1_path)
                 aligned_emb_2 = self.load_txt(aligned_emb_2_path)
-                self.combine(aligned_emb_1, aligned_emb_2, npy_path, pkl_path)
+                self.combine(aligned_emb_1, aligned_emb_2, pkl_path, npy_path)
